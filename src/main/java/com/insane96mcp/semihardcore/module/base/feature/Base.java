@@ -6,7 +6,7 @@ import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import net.minecraftforge.common.ForgeConfigSpec;
 
-@Label(name = "Base")
+@Label(name = "Semi Hardcore")
 public class Base extends Feature {
 
     private final ForgeConfigSpec.ConfigValue<Integer> startingLivesConfig;
@@ -17,7 +17,7 @@ public class Base extends Feature {
         super(Config.builder, module, true, false);
         super.pushConfig(Config.builder);
         startingLivesConfig = Config.builder
-                .comment("How many lives players spawn with")
+                .comment("How many lives players spawns with")
                 .defineInRange("Starting Lives", this.startingLives, 0, Integer.MAX_VALUE);
         Config.builder.pop();
     }

@@ -2,8 +2,10 @@ package com.insane96mcp.semihardcore.event;
 
 import com.insane96mcp.semihardcore.SemiHardcore;
 import com.insane96mcp.semihardcore.capability.Lives;
+import com.insane96mcp.semihardcore.setup.Strings;
 import net.minecraft.Util;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameType;
 import net.minecraftforge.common.util.FakePlayer;
@@ -42,10 +44,10 @@ public class Player {
         event.getPlayer().getCapability(Lives.INSTANCE).ifPresent(livesCap -> {
             if (livesCap.getLives() <= 0) {
                 player.setGameMode(GameType.SPECTATOR);
-                player.sendMessage(new TextComponent("You lost a life. You have no lives remaining."), Util.NIL_UUID);
+                player.sendMessage(new TextComponent(Strings.Translatable.LIFE_LOST_LOSE), Util.NIL_UUID);
             }
             else
-                player.sendMessage(new TextComponent("You lost a life. %s lives remaining".formatted(livesCap.getLives())), Util.NIL_UUID);
+                player.sendMessage(new TranslatableComponent(Strings.Translatable.LIFE_LOST, livesCap.getLives()), Util.NIL_UUID);
         });
     }
 }

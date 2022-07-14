@@ -11,7 +11,7 @@ public class BaseModule extends Module {
     public Base base;
 
     public BaseModule() {
-        super(Config.builder);
+        super(Config.builder, true, false);
         this.pushConfig(Config.builder);
         base = new Base(this);
         Config.builder.pop();
