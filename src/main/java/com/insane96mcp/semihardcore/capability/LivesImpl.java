@@ -2,7 +2,7 @@ package com.insane96mcp.semihardcore.capability;
 
 public class LivesImpl implements ILives {
 
-    private int lives = 3;
+    private int lives;
 
     @Override
     public int getLives() {
@@ -16,6 +16,6 @@ public class LivesImpl implements ILives {
 
     @Override
     public void addLives(int lives) {
-        this.lives += lives;
+        this.lives = Math.max(this.lives + lives, 0);
     }
 }
