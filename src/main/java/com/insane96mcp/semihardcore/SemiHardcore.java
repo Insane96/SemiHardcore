@@ -2,12 +2,14 @@ package com.insane96mcp.semihardcore;
 
 import com.insane96mcp.semihardcore.capability.Lives;
 import com.insane96mcp.semihardcore.capability.LivesProvider;
+import com.insane96mcp.semihardcore.setup.Config;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import org.slf4j.Logger;
 
@@ -20,6 +22,7 @@ public class SemiHardcore
 
     public SemiHardcore()
     {
+        ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, Config.COMMON_SPEC);
         MinecraftForge.EVENT_BUS.register(this);
     }
 

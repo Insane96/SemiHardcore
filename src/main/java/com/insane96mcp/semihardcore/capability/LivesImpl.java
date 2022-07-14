@@ -1,8 +1,14 @@
 package com.insane96mcp.semihardcore.capability;
 
+import com.insane96mcp.semihardcore.module.Modules;
+
 public class LivesImpl implements ILives {
 
     private int lives;
+
+    public LivesImpl() {
+        this.lives = Modules.base.base.startingLives;
+    }
 
     @Override
     public int getLives() {
