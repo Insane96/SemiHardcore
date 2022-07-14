@@ -2,7 +2,7 @@ package com.insane96mcp.semihardcore.capability;
 
 public class LivesImpl implements ILives {
 
-    private int lives;
+    private int lives = 3;
 
     @Override
     public int getLives() {

@@ -4,6 +4,6 @@ import com.insane96mcp.semihardcore.SemiHardcore;
 
 public class Strings {
     public static class Tags {
-        public static final String LIVES = SemiHardcore.MOD_ID + "lives";
+        public static final String LIVES = SemiHardcore.RESOURCE_PREFIX + "lives";
     }
 }
