@@ -56,8 +56,7 @@ public class Lives extends Feature {
         player.getCapability(PlayerLife.INSTANCE).ifPresent(playerLife -> {
             playerLife.addLives(-1);
             if (playerLife.getLives() <= 0) {
-                event.setCanceled(true);
-                //Reset health otherwise the cancellation doesn't work
+                //Reset health so you respawn where you died
                 player.setHealth(player.getMaxHealth());
                 player.setGameMode(GameType.SPECTATOR);
                 player.sendMessage(new TranslatableComponent(Strings.Translatable.LIFE_LOST_LOSE), Util.NIL_UUID);
@@ -78,8 +77,10 @@ public class Lives extends Feature {
             return;
 
         ServerPlayer player = (ServerPlayer) event.getPlayer();
-        event.getPlayer().getCapability(PlayerLife.INSTANCE).ifPresent(livesCap -> {
-            player.sendMessage(new TranslatableComponent(Strings.Translatable.LIFE_LOST, livesCap.getLives()), Util.NIL_UUID);
+        event.getPlayer().getCapability(PlayerLife.INSTANCE).ifPresent(playerLife -> {
+            if (playerLife.getLives() > 0) {
+                player.sendMessage(new TranslatableComponent(Strings.Translatable.LIFE_LOST, playerLife.getLives()), Util.NIL_UUID);
+            }
         });
     }
 }
