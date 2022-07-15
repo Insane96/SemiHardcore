@@ -57,6 +57,8 @@ public class Lives extends Feature {
             playerLife.addLives(-1);
             if (playerLife.getLives() <= 0) {
                 event.setCanceled(true);
+                //Reset health otherwise the cancellation doesn't work
+                player.setHealth(player.getMaxHealth());
                 player.setGameMode(GameType.SPECTATOR);
                 player.sendMessage(new TranslatableComponent(Strings.Translatable.LIFE_LOST_LOSE), Util.NIL_UUID);
                 LightningBolt lightningBolt = new LightningBolt(EntityType.LIGHTNING_BOLT, player.level);
