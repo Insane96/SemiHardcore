@@ -11,28 +11,30 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class LivesProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundTag> {
+public class PlayerLifeProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundTag> {
 
-    public static final ResourceLocation IDENTIFIER = new ResourceLocation(Strings.Tags.LIVES);
+    public static final ResourceLocation IDENTIFIER = new ResourceLocation(Strings.Tags.PLAYER_LIFE);
 
-    private final ILives backend = new LivesImpl();
-    private final LazyOptional<ILives> optionalData = LazyOptional.of(() -> backend);
+    private final IPlayerLife backend = new PlayerLifeImpl();
+    private final LazyOptional<IPlayerLife> optionalData = LazyOptional.of(() -> backend);
 
     @NotNull
     @Override
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        return Lives.INSTANCE.orEmpty(cap, this.optionalData);
+        return PlayerLife.INSTANCE.orEmpty(cap, this.optionalData);
     }
 
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag nbt = new CompoundTag();
         nbt.putInt(Strings.Tags.LIVES, backend.getLives());
+        nbt.putInt(Strings.Tags.HEALTH_MODIFIER, backend.getHealthModifier());
         return nbt;
     }
 
     @Override
     public void deserializeNBT(CompoundTag nbt) {
         backend.setLives(nbt.getInt(Strings.Tags.LIVES));
+        backend.setHealthModifier(nbt.getInt(Strings.Tags.HEALTH_MODIFIER));
     }
 }

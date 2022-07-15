@@ -1,8 +1,8 @@
 package com.insane96mcp.semihardcore.event;
 
 import com.insane96mcp.semihardcore.SemiHardcore;
-import com.insane96mcp.semihardcore.capability.Lives;
-import com.insane96mcp.semihardcore.capability.LivesImpl;
+import com.insane96mcp.semihardcore.capability.PlayerLife;
+import com.insane96mcp.semihardcore.capability.PlayerLifeImpl;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -17,7 +17,7 @@ public class Capabilities {
         Player newPlayer = event.getPlayer();
 
         oldPlayer.reviveCaps();
-        oldPlayer.getCapability(Lives.INSTANCE).ifPresent(newLives -> newPlayer.getCapability(Lives.INSTANCE).ifPresent(oldLives -> {
+        oldPlayer.getCapability(PlayerLife.INSTANCE).ifPresent(newLives -> newPlayer.getCapability(PlayerLife.INSTANCE).ifPresent(oldLives -> {
             oldLives.setLives(newLives.getLives());
         }));
         oldPlayer.invalidateCaps();
@@ -25,6 +25,6 @@ public class Capabilities {
 
     @SubscribeEvent
     public void registerCaps(RegisterCapabilitiesEvent event) {
-        event.register(LivesImpl.class);
+        event.register(PlayerLifeImpl.class);
     }
 }

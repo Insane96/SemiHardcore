@@ -1,6 +1,6 @@
 package com.insane96mcp.semihardcore;
 
-import com.insane96mcp.semihardcore.capability.LivesProvider;
+import com.insane96mcp.semihardcore.capability.PlayerLifeProvider;
 import com.insane96mcp.semihardcore.command.SHCommand;
 import com.insane96mcp.semihardcore.setup.Config;
 import com.mojang.logging.LogUtils;
@@ -31,7 +31,7 @@ public class SemiHardcore
     public void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event)
     {
         if (event.getObject() instanceof Player)
-            event.addCapability(LivesProvider.IDENTIFIER, new LivesProvider());
+            event.addCapability(PlayerLifeProvider.IDENTIFIER, new PlayerLifeProvider());
     }
 
     @SubscribeEvent

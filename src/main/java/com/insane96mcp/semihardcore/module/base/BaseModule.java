@@ -1,25 +1,29 @@
 package com.insane96mcp.semihardcore.module.base;
 
-import com.insane96mcp.semihardcore.module.base.feature.Base;
+import com.insane96mcp.semihardcore.module.base.feature.Health;
+import com.insane96mcp.semihardcore.module.base.feature.Lives;
 import com.insane96mcp.semihardcore.setup.Config;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 
-@Label(name = "Base")
+@Label(name = "Semi-Hardcore")
 public class BaseModule extends Module {
 
-    public Base base;
+    public Lives lives;
+    public Health health;
 
     public BaseModule() {
         super(Config.builder, true, false);
         this.pushConfig(Config.builder);
-        base = new Base(this);
+        lives = new Lives(this);
+        health = new Health(this);
         Config.builder.pop();
     }
 
     @Override
     public void loadConfig() {
         super.loadConfig();
-        base.loadConfig();
+        lives.loadConfig();
+        health.loadConfig();
     }
 }

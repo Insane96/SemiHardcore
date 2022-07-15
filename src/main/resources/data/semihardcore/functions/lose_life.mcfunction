@@ -1,0 +1,1 @@
+semihardcore @s lives add -1

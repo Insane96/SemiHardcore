@@ -1,27 +1,50 @@
-package com.insane96mcp.semihardcore.event;
+package com.insane96mcp.semihardcore.module.base.feature;
 
-import com.insane96mcp.semihardcore.SemiHardcore;
-import com.insane96mcp.semihardcore.capability.Lives;
+import com.insane96mcp.semihardcore.capability.PlayerLife;
+import com.insane96mcp.semihardcore.setup.Config;
 import com.insane96mcp.semihardcore.setup.Strings;
+import insane96mcp.insanelib.base.Feature;
+import insane96mcp.insanelib.base.Label;
+import insane96mcp.insanelib.base.Module;
 import net.minecraft.Util;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameType;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = SemiHardcore.MOD_ID)
-public class Player {
+@Label(name = "Lives")
+public class Lives extends Feature {
+
+    private final ForgeConfigSpec.ConfigValue<Integer> startingLivesConfig;
+
+    public int startingLives = 5;
+
+    public Lives(Module module) {
+        super(Config.builder, module, true);
+        super.pushConfig(Config.builder);
+        startingLivesConfig = Config.builder
+                .comment("How many lives players spawns with")
+                .defineInRange("Starting Lives", this.startingLives, 0, Integer.MAX_VALUE);
+        Config.builder.pop();
+    }
+
+    @Override
+    public void loadConfig() {
+        super.loadConfig();
+        this.startingLives = this.startingLivesConfig.get();
+    }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onPlayerDeath(LivingDeathEvent event)
+    public void onPlayerDeath(LivingDeathEvent event)
     {
-        if (event.getEntityLiving().getLevel().isClientSide
+        if (!this.isEnabled()
+                || event.getEntityLiving().getLevel().isClientSide
                 || !(event.getEntityLiving() instanceof ServerPlayer player)
                 || event.getEntityLiving() instanceof FakePlayer
                 || event.getEntityLiving().getLevel().getLevelData().isHardcore()
@@ -29,19 +52,21 @@ public class Player {
                 || player.gameMode.getGameModeForPlayer() == GameType.SPECTATOR)
             return;
 
-        player.getCapability(Lives.INSTANCE).ifPresent(livesCap -> {
+        player.getCapability(PlayerLife.INSTANCE).ifPresent(livesCap -> {
             livesCap.addLives(-1);
         });
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
+    public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
     {
-        if (event.getPlayer().level.isClientSide)
+        if (!this.isEnabled()
+                || event.getPlayer().level.isClientSide
+                || event.isEndConquered())
             return;
 
         ServerPlayer player = (ServerPlayer) event.getPlayer();
-        event.getPlayer().getCapability(Lives.INSTANCE).ifPresent(livesCap -> {
+        event.getPlayer().getCapability(PlayerLife.INSTANCE).ifPresent(livesCap -> {
             if (livesCap.getLives() <= 0) {
                 player.setGameMode(GameType.SPECTATOR);
                 player.sendMessage(new TextComponent(Strings.Translatable.LIFE_LOST_LOSE), Util.NIL_UUID);

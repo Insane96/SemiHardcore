@@ -1,0 +1,1 @@
+semihardcore @s health add -2
