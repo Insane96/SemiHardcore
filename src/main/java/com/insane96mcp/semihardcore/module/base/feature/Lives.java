@@ -7,9 +7,10 @@ import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import net.minecraft.Util;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.level.GameType;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.util.FakePlayer;
@@ -52,8 +53,17 @@ public class Lives extends Feature {
                 || player.gameMode.getGameModeForPlayer() == GameType.SPECTATOR)
             return;
 
-        player.getCapability(PlayerLife.INSTANCE).ifPresent(livesCap -> {
-            livesCap.addLives(-1);
+        player.getCapability(PlayerLife.INSTANCE).ifPresent(playerLife -> {
+            playerLife.addLives(-1);
+            if (playerLife.getLives() <= 0) {
+                event.setCanceled(true);
+                player.setGameMode(GameType.SPECTATOR);
+                player.sendMessage(new TranslatableComponent(Strings.Translatable.LIFE_LOST_LOSE), Util.NIL_UUID);
+                LightningBolt lightningBolt = new LightningBolt(EntityType.LIGHTNING_BOLT, player.level);
+                lightningBolt.setVisualOnly(true);
+                lightningBolt.setPos(player.position());
+                player.level.addFreshEntity(lightningBolt);
+            }
         });
     }
 
@@ -67,12 +77,7 @@ public class Lives extends Feature {
 
         ServerPlayer player = (ServerPlayer) event.getPlayer();
         event.getPlayer().getCapability(PlayerLife.INSTANCE).ifPresent(livesCap -> {
-            if (livesCap.getLives() <= 0) {
-                player.setGameMode(GameType.SPECTATOR);
-                player.sendMessage(new TextComponent(Strings.Translatable.LIFE_LOST_LOSE), Util.NIL_UUID);
-            }
-            else
-                player.sendMessage(new TranslatableComponent(Strings.Translatable.LIFE_LOST, livesCap.getLives()), Util.NIL_UUID);
+            player.sendMessage(new TranslatableComponent(Strings.Translatable.LIFE_LOST, livesCap.getLives()), Util.NIL_UUID);
         });
     }
 }

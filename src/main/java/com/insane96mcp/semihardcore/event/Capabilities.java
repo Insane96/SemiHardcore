@@ -19,6 +19,7 @@ public class Capabilities {
         oldPlayer.reviveCaps();
         oldPlayer.getCapability(PlayerLife.INSTANCE).ifPresent(newLives -> newPlayer.getCapability(PlayerLife.INSTANCE).ifPresent(oldLives -> {
             oldLives.setLives(newLives.getLives());
+            oldLives.setHealthModifier(newLives.getHealthModifier());
         }));
         oldPlayer.invalidateCaps();
     }
