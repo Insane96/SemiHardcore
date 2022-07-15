@@ -37,7 +37,7 @@ public class Health extends Feature {
                 .defineInRange("Starting Health", this.startingHealth, 1, Integer.MAX_VALUE);
         healthPenaltyConfig = Config.builder
                 .comment("Half hearts lost when the player dies. Negative numbers can be used to give health to players.")
-                .defineInRange("Half hearts penalty on death", this.healthPenalty, 1, Integer.MAX_VALUE);
+                .define("Half hearts penalty on death", this.healthPenalty);
         Config.builder.pop();
     }
 
