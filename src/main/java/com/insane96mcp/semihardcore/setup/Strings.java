@@ -18,5 +18,7 @@ public class Strings {
         public static final String PLAYER_ADD_HEALTH = SemiHardcore.RESOURCE_PREFIX + "player_add_health";
         public static final String LIFE_LOST = SemiHardcore.RESOURCE_PREFIX + "life_lost";
         public static final String LIFE_LOST_LOSE = SemiHardcore.RESOURCE_PREFIX + "life_lost_lose";
+        public static final String LIVES_REMAINING = SemiHardcore.RESOURCE_PREFIX + "lives_remaining";
+        public static final String LIFE_REMAINING = SemiHardcore.RESOURCE_PREFIX + "life_remaining";
     }
 }

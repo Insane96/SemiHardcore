@@ -8,6 +8,8 @@ import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import net.minecraft.Util;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
@@ -79,7 +81,11 @@ public class Lives extends Feature {
         ServerPlayer player = (ServerPlayer) event.getPlayer();
         event.getPlayer().getCapability(PlayerLife.INSTANCE).ifPresent(playerLife -> {
             if (playerLife.getLives() > 0) {
-                player.sendMessage(new TranslatableComponent(Strings.Translatable.LIFE_LOST, playerLife.getLives()), Util.NIL_UUID);
+                player.connection.send(new ClientboundSetTitleTextPacket(new TranslatableComponent(Strings.Translatable.LIFE_LOST)));
+                if (playerLife.getLives() > 1)
+                    player.connection.send(new ClientboundSetSubtitleTextPacket(new TranslatableComponent(Strings.Translatable.LIVES_REMAINING, playerLife.getLives())));
+                else
+                    player.connection.send(new ClientboundSetSubtitleTextPacket(new TranslatableComponent(Strings.Translatable.LIFE_REMAINING, playerLife.getLives())));
             }
         });
     }

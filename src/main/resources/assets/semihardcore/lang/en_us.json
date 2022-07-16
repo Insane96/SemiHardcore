@@ -5,6 +5,8 @@
     "semihardcore:player_get_health": "%s base health: %s",
     "semihardcore:player_set_health": "Set %s base health to %s",
     "semihardcore:player_add_health": "Added %s base health to %s",
-    "semihardcore:life_lost": "You lost a life. %s lives remaining",
-    "semihardcore:life_lost_lose": "You lost a life. No lifes remaining. GG WP"
+    "semihardcore:life_lost": "You lost a life",
+    "semihardcore:lives_remaining": "%s lives remaining",
+    "semihardcore:life_remaining": "Last life, be careful!",
+    "semihardcore:life_lost_lose": "You lost a life. No lives remaining. GG WP"
 }
