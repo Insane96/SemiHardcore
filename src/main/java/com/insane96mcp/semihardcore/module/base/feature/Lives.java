@@ -75,10 +75,13 @@ public class Lives extends Feature {
     {
         if (!this.isEnabled()
                 || event.getPlayer().level.isClientSide
-                || event.isEndConquered())
+                || !(event.getEntityLiving() instanceof ServerPlayer player)
+                || event.isEndConquered()
+                || player.getLevel().getLevelData().isHardcore()
+                || player.gameMode.getGameModeForPlayer() == GameType.CREATIVE
+                || player.gameMode.getGameModeForPlayer() == GameType.SPECTATOR)
             return;
 
-        ServerPlayer player = (ServerPlayer) event.getPlayer();
         event.getPlayer().getCapability(PlayerLife.INSTANCE).ifPresent(playerLife -> {
             if (playerLife.getLives() > 0) {
                 player.connection.send(new ClientboundSetTitleTextPacket(new TranslatableComponent(Strings.Translatable.LIFE_LOST)));
