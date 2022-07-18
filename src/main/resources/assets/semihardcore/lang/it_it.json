@@ -1,0 +1,12 @@
+{
+    "semihardcore:player_get_lives_left": "Vite rimaste a %s: %s",
+    "semihardcore:player_set_lives_left": "Impostate vite rimaste di %s a %s",
+    "semihardcore:player_add_lives_left": "Aggiunte %s vite a %s",
+    "semihardcore:player_get_health": "%s salute base: %s",
+    "semihardcore:player_set_health": "Impostata salute base di %s a %s",
+    "semihardcore:player_add_health": "Aggiunta %s salute base a %s",
+    "semihardcore:life_lost": "Hai perso una vita",
+    "semihardcore:lives_remaining": "%s vite rimanenti",
+    "semihardcore:life_remaining": "Ultima vita, stai in campana!",
+    "semihardcore:life_lost_lose": "Hai perso una vita. Nessuna vita rimanente. GG WP"
+}
