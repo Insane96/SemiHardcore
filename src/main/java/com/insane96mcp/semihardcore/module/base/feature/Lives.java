@@ -25,8 +25,10 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class Lives extends Feature {
 
     private final ForgeConfigSpec.ConfigValue<Integer> startingLivesConfig;
+    private final ForgeConfigSpec.ConfigValue<Integer> maxLivesConfig;
 
     public int startingLives = 5;
+    public int maxLives = 0;
 
     public Lives(Module module) {
         super(Config.builder, module, true);
@@ -34,6 +36,9 @@ public class Lives extends Feature {
         startingLivesConfig = Config.builder
                 .comment("How many lives players spawns with")
                 .defineInRange("Starting Lives", this.startingLives, 0, Integer.MAX_VALUE);
+        maxLivesConfig = Config.builder
+                .comment("Max lives you can gain. 0 for infinite.")
+                .defineInRange("Max Lives", this.maxLives, 0, Integer.MAX_VALUE);
         Config.builder.pop();
     }
 
@@ -41,6 +46,7 @@ public class Lives extends Feature {
     public void loadConfig() {
         super.loadConfig();
         this.startingLives = this.startingLivesConfig.get();
+        this.maxLives = this.maxLivesConfig.get();
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)

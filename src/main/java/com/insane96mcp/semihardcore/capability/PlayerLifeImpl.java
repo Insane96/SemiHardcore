@@ -1,6 +1,7 @@
 package com.insane96mcp.semihardcore.capability;
 
 import com.insane96mcp.semihardcore.module.Modules;
+import net.minecraft.util.Mth;
 
 public class PlayerLifeImpl implements IPlayerLife {
 
@@ -19,12 +20,22 @@ public class PlayerLifeImpl implements IPlayerLife {
 
     @Override
     public void setLives(int lives) {
-        this.lives = lives;
+        this.setLives(lives, Modules.base.lives.maxLives == 0 ? Integer.MAX_VALUE : Modules.base.lives.maxLives);
+    }
+
+    @Override
+    public void setLives(int lives, int upperCap) {
+        this.lives = Mth.clamp(lives, 0, upperCap);
     }
 
     @Override
     public void addLives(int lives) {
-        this.lives = Math.max(this.lives + lives, 0);
+        this.addLives(lives, Modules.base.lives.maxLives == 0 ? Integer.MAX_VALUE : Modules.base.lives.maxLives);
+    }
+
+    @Override
+    public void addLives(int lives, int upperCap) {
+        this.lives = Mth.clamp(this.lives + lives, 0, upperCap);
     }
 
     @Override

@@ -8,5 +8,6 @@
     "semihardcore:life_lost": "Hai perso una vita",
     "semihardcore:lives_remaining": "%s vite rimanenti",
     "semihardcore:life_remaining": "Ultima vita, stai in campana!",
-    "semihardcore:life_lost_lose": "Hai perso una vita. Nessuna vita rimanente. GG WP"
+    "semihardcore:life_lost_lose": "Hai perso una vita. Nessuna vita rimanente. GG WP",
+    "semihardcore:command_fail": "Impossibile eseguire comando"
 }

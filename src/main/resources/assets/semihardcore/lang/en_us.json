@@ -8,5 +8,6 @@
     "semihardcore:life_lost": "You lost a life",
     "semihardcore:lives_remaining": "%s lives remaining",
     "semihardcore:life_remaining": "Last life, be careful!",
-    "semihardcore:life_lost_lose": "You lost a life. No lives remaining. GG WP"
+    "semihardcore:life_lost_lose": "You lost a life. No lives remaining. GG WP",
+    "semihardcore:command_fail": "Failed to execute command"
 }

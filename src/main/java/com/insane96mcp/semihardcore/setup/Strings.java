@@ -20,5 +20,6 @@ public class Strings {
         public static final String LIFE_LOST_LOSE = SemiHardcore.RESOURCE_PREFIX + "life_lost_lose";
         public static final String LIVES_REMAINING = SemiHardcore.RESOURCE_PREFIX + "lives_remaining";
         public static final String LIFE_REMAINING = SemiHardcore.RESOURCE_PREFIX + "life_remaining";
+        public static final String COMMAND_FAIL = SemiHardcore.RESOURCE_PREFIX + "command_fail";
     }
 }

@@ -11,6 +11,7 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SHCommand {
@@ -23,11 +24,17 @@ public class SHCommand {
                                 )
                                 .then(Commands.literal("set")
                                         .then(Commands.argument("amount", IntegerArgumentType.integer())
+                                                .then(Commands.argument("max", IntegerArgumentType.integer())
+                                                        .executes(context -> setLives(context.getSource(), EntityArgument.getPlayer(context, "targetPlayer"), IntegerArgumentType.getInteger(context, "amount"), IntegerArgumentType.getInteger(context, "max")))
+                                                )
                                                 .executes(context -> setLives(context.getSource(), EntityArgument.getPlayer(context, "targetPlayer"), IntegerArgumentType.getInteger(context, "amount")))
                                         )
                                 )
                                 .then(Commands.literal("add")
                                         .then(Commands.argument("amount", IntegerArgumentType.integer())
+                                                .then(Commands.argument("max", IntegerArgumentType.integer())
+                                                        .executes(context -> addLives(context.getSource(), EntityArgument.getPlayer(context, "targetPlayer"), IntegerArgumentType.getInteger(context, "amount"), IntegerArgumentType.getInteger(context, "max")))
+                                                )
                                                 .executes(context -> addLives(context.getSource(), EntityArgument.getPlayer(context, "targetPlayer"), IntegerArgumentType.getInteger(context, "amount")))
                                         )
                                 )
@@ -59,14 +66,38 @@ public class SHCommand {
     }
 
     private static int setLives(CommandSourceStack source, ServerPlayer targetPlayer, int amount) {
-        targetPlayer.getCapability(PlayerLife.INSTANCE).ifPresent(cap -> cap.setLives(amount));
-        source.sendSuccess(new TranslatableComponent(Strings.Translatable.PLAYER_SET_LIVES_LEFT, targetPlayer.getName(), amount), true);
+        return setLives(source, targetPlayer, amount, -1);
+    }
+
+    private static int setLives(CommandSourceStack source, ServerPlayer targetPlayer, int amount, int max) {
+        AtomicBoolean success = new AtomicBoolean(false);
+        targetPlayer.getCapability(PlayerLife.INSTANCE).ifPresent(cap -> {
+            if (max == -1) cap.setLives(amount);
+            else cap.setLives(amount, max);
+            source.sendSuccess(new TranslatableComponent(Strings.Translatable.PLAYER_SET_LIVES_LEFT, targetPlayer.getName(), amount), true);
+            success.set(true);
+        });
+        if (!success.get()) {
+            source.sendFailure(new TranslatableComponent(Strings.Translatable.COMMAND_FAIL));
+        }
         return amount;
     }
 
     private static int addLives(CommandSourceStack source, ServerPlayer targetPlayer, int amount) {
-        targetPlayer.getCapability(PlayerLife.INSTANCE).ifPresent(cap -> cap.addLives(amount));
-        source.sendSuccess(new TranslatableComponent(Strings.Translatable.PLAYER_ADD_LIVES_LEFT, amount, targetPlayer.getName()), true);
+        return addLives(source, targetPlayer, amount, -1);
+    }
+
+    private static int addLives(CommandSourceStack source, ServerPlayer targetPlayer, int amount, int max) {
+        AtomicBoolean success = new AtomicBoolean(false);
+        targetPlayer.getCapability(PlayerLife.INSTANCE).ifPresent(cap -> {
+            if (max == -1) cap.addLives(amount);
+            else cap.addLives(amount, max);
+            source.sendSuccess(new TranslatableComponent(Strings.Translatable.PLAYER_ADD_LIVES_LEFT, amount, targetPlayer.getName()), true);
+            success.set(true);
+        });
+        if (!success.get()) {
+            source.sendFailure(new TranslatableComponent(Strings.Translatable.COMMAND_FAIL));
+        }
         return amount;
     }
 
