@@ -2,6 +2,7 @@
 
 ## Upcoming
 * Added max life config. Also added a new command argument to cap the maximum lives you can get
+* Default mcfunctions now announce to the player that they gained a life.
 * Added italian translation
 
 ## 1.0.2
