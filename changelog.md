@@ -2,6 +2,8 @@
 
 ## Upcoming
 * Added max life config. Also added a new command argument to cap the maximum lives you can get
+* Players' lives lost and remaining are now announced to chat on death
+* Player now actually respawns (on the position he died) on last life and gets a message
 * Default mcfunctions now announce to the player that they gained a life.
 * Added italian translation
 

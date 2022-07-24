@@ -20,6 +20,10 @@ public class Strings {
         public static final String LIFE_LOST_LOSE = SemiHardcore.RESOURCE_PREFIX + "life_lost_lose";
         public static final String LIVES_REMAINING = SemiHardcore.RESOURCE_PREFIX + "lives_remaining";
         public static final String LIFE_REMAINING = SemiHardcore.RESOURCE_PREFIX + "life_remaining";
+        public static final String NO_LIVES_REMAINING = SemiHardcore.RESOURCE_PREFIX + "no_lives_remaining";
+        public static final String PLAYER_LIFE_LOST = SemiHardcore.RESOURCE_PREFIX + "player_life_lost";
+        public static final String PLAYER_NO_LIFE_REMAINING = SemiHardcore.RESOURCE_PREFIX + "player_no_lives_remaining";
+        public static final String GG_WP = SemiHardcore.RESOURCE_PREFIX + "gg_wp";
         public static final String COMMAND_FAIL = SemiHardcore.RESOURCE_PREFIX + "command_fail";
     }
 }

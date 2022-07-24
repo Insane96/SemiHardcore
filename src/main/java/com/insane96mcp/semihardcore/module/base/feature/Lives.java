@@ -6,7 +6,7 @@ import com.insane96mcp.semihardcore.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import net.minecraft.Util;
+import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
@@ -24,11 +24,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 @Label(name = "Lives")
 public class Lives extends Feature {
 
-    private final ForgeConfigSpec.ConfigValue<Integer> startingLivesConfig;
-    private final ForgeConfigSpec.ConfigValue<Integer> maxLivesConfig;
+    private final ForgeConfigSpec.IntValue startingLivesConfig;
+    private final ForgeConfigSpec.IntValue maxLivesConfig;
+    private final ForgeConfigSpec.BooleanValue announceLifeLostToChatConfig;
 
     public int startingLives = 5;
     public int maxLives = 0;
+    public boolean announceLifeLostToChat = true;
 
     public Lives(Module module) {
         super(Config.builder, module, true);
@@ -39,6 +41,9 @@ public class Lives extends Feature {
         maxLivesConfig = Config.builder
                 .comment("Max lives you can gain. 0 for infinite.")
                 .defineInRange("Max Lives", this.maxLives, 0, Integer.MAX_VALUE);
+        announceLifeLostToChatConfig = Config.builder
+                .comment("Announce players' life lost to chat.")
+                .define("Announce Life Lost to Chat", this.announceLifeLostToChat);
         Config.builder.pop();
     }
 
@@ -47,6 +52,7 @@ public class Lives extends Feature {
         super.loadConfig();
         this.startingLives = this.startingLivesConfig.get();
         this.maxLives = this.maxLivesConfig.get();
+        this.announceLifeLostToChat = this.announceLifeLostToChatConfig.get();
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -64,10 +70,7 @@ public class Lives extends Feature {
         player.getCapability(PlayerLife.INSTANCE).ifPresent(playerLife -> {
             playerLife.addLives(-1);
             if (playerLife.getLives() <= 0) {
-                //Reset health so you respawn where you died
-                player.setHealth(player.getMaxHealth());
-                player.setGameMode(GameType.SPECTATOR);
-                player.sendMessage(new TranslatableComponent(Strings.Translatable.LIFE_LOST_LOSE), Util.NIL_UUID);
+                player.setRespawnPosition(player.level.dimension(), player.blockPosition(), player.getXRot(), true, false);
                 LightningBolt lightningBolt = new LightningBolt(EntityType.LIGHTNING_BOLT, player.level);
                 lightningBolt.setVisualOnly(true);
                 lightningBolt.setPos(player.position());
@@ -82,19 +85,30 @@ public class Lives extends Feature {
         if (!this.isEnabled()
                 || event.getPlayer().level.isClientSide
                 || !(event.getEntityLiving() instanceof ServerPlayer player)
-                || event.isEndConquered()
+                || event.isEndConquered() //This event is called even when the player enters the End Portal
                 || player.getLevel().getLevelData().isHardcore()
-                || player.gameMode.getGameModeForPlayer() == GameType.CREATIVE
-                || player.gameMode.getGameModeForPlayer() == GameType.SPECTATOR)
+                || player.gameMode.getGameModeForPlayer() == GameType.CREATIVE)
             return;
 
         event.getPlayer().getCapability(PlayerLife.INSTANCE).ifPresent(playerLife -> {
-            if (playerLife.getLives() > 0) {
+            if (playerLife.getLives() > 0 && player.gameMode.getGameModeForPlayer() != GameType.SPECTATOR) {
                 player.connection.send(new ClientboundSetTitleTextPacket(new TranslatableComponent(Strings.Translatable.LIFE_LOST)));
                 if (playerLife.getLives() > 1)
                     player.connection.send(new ClientboundSetSubtitleTextPacket(new TranslatableComponent(Strings.Translatable.LIVES_REMAINING, playerLife.getLives())));
                 else
                     player.connection.send(new ClientboundSetSubtitleTextPacket(new TranslatableComponent(Strings.Translatable.LIFE_REMAINING, playerLife.getLives())));
+
+                if (this.announceLifeLostToChat) {
+                    player.server.getPlayerList().broadcastMessage(new TranslatableComponent(Strings.Translatable.PLAYER_LIFE_LOST, player.getDisplayName().getString(), playerLife.getLives()), ChatType.CHAT, player.getUUID());
+                }
+            }
+            else {
+                player.connection.send(new ClientboundSetTitleTextPacket(new TranslatableComponent(Strings.Translatable.GG_WP)));
+                player.connection.send(new ClientboundSetSubtitleTextPacket(new TranslatableComponent(Strings.Translatable.NO_LIVES_REMAINING, playerLife.getLives())));
+
+                if (this.announceLifeLostToChat) {
+                    player.server.getPlayerList().broadcastMessage(new TranslatableComponent(Strings.Translatable.PLAYER_NO_LIFE_REMAINING, player.getDisplayName().getString(), playerLife.getLives()), ChatType.CHAT, player.getUUID());
+                }
             }
         });
     }

@@ -9,5 +9,9 @@
     "semihardcore:lives_remaining": "%s lives remaining",
     "semihardcore:life_remaining": "Last life, be careful!",
     "semihardcore:life_lost_lose": "You lost a life. No lives remaining. GG WP",
+    "semihardcore:player_life_lost": "%s lost a life. Has %s lives remaining.",
+    "semihardcore:player_no_lives_remaining": "%s lost a life. Has no lives remaining. F in chat.",
+    "semihardcore:gg_wp": "GG WP",
+    "semihardcore:no_lives_remaining": "You lost all your lives",
     "semihardcore:command_fail": "Failed to execute command"
 }

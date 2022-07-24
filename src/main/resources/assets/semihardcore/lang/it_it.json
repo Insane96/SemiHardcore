@@ -9,5 +9,7 @@
     "semihardcore:lives_remaining": "%s vite rimanenti",
     "semihardcore:life_remaining": "Ultima vita, stai in campana!",
     "semihardcore:life_lost_lose": "Hai perso una vita. Nessuna vita rimanente. GG WP",
+    "semihardcore:player_life_lost": "%s ha perso una vita. Ha %s vita/e rimanenti.",
+    "semihardcore:player_no_lives_remaining": "%s ha perso una vita. Non ha vite rimanenti. F in chat.",
     "semihardcore:command_fail": "Impossibile eseguire comando"
 }
