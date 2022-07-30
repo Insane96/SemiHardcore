@@ -105,6 +105,7 @@ public class Lives extends Feature {
             else {
                 player.connection.send(new ClientboundSetTitleTextPacket(new TranslatableComponent(Strings.Translatable.GG_WP)));
                 player.connection.send(new ClientboundSetSubtitleTextPacket(new TranslatableComponent(Strings.Translatable.NO_LIVES_REMAINING, playerLife.getLives())));
+                player.setGameMode(GameType.SPECTATOR);
 
                 if (this.announceLifeLostToChat) {
                     player.server.getPlayerList().broadcastMessage(new TranslatableComponent(Strings.Translatable.PLAYER_NO_LIFE_REMAINING, player.getDisplayName().getString(), playerLife.getLives()), ChatType.CHAT, player.getUUID());

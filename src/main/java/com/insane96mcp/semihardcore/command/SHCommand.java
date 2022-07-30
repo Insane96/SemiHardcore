@@ -24,7 +24,7 @@ public class SHCommand {
                                 )
                                 .then(Commands.literal("set")
                                         .then(Commands.argument("amount", IntegerArgumentType.integer())
-                                                .then(Commands.argument("max", IntegerArgumentType.integer())
+                                                .then(Commands.argument("max", IntegerArgumentType.integer()) //TODO Remove, makes no sense
                                                         .executes(context -> setLives(context.getSource(), EntityArgument.getPlayer(context, "targetPlayer"), IntegerArgumentType.getInteger(context, "amount"), IntegerArgumentType.getInteger(context, "max")))
                                                 )
                                                 .executes(context -> setLives(context.getSource(), EntityArgument.getPlayer(context, "targetPlayer"), IntegerArgumentType.getInteger(context, "amount")))
