@@ -1,27 +1,33 @@
 modLoader="javafml"
-loaderVersion="[40,)"
+loaderVersion="[42,)"
 license="All rights reserved"
 issueTrackerURL="https://github.com/Insane96/SemiHardcore/issues"
 [[mods]]
-modId="semihardcore"
-version="${file.jarVersion}"
-displayName="Semi-Hardcore"
-displayURL="https://minecraft.curseforge.com/projects/semi-hardcore"
-logoFile="examplemod.png"
-# credits=""
-authors="Insane96MCP"
-description='''
-Add lifes to the survival game.
-'''
-[[dependencies.semihardcore]]
-    modId="forge"
-    mandatory=true
-    versionRange="[40,)"
-    ordering="NONE"
-    side="BOTH"
-[[dependencies.semihardcore]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.18.2,1.19)"
-    ordering="NONE"
-    side="BOTH"
+    modId="semihardcore"
+    version="${file.jarVersion}"
+    displayName="Semi-Hardcore"
+    displayURL="https://minecraft.curseforge.com/projects/semi-hardcore"
+    # logoFile="examplemod.png"
+    # credits=""
+    authors="Insane96MCP"
+    description='''
+    Add lifes to the survival game.
+    '''
+    [[dependencies.semihardcore]]
+        modId="forge"
+        mandatory=true
+        versionRange="[42,)"
+        ordering="NONE"
+        side="BOTH"
+    [[dependencies.semihardcore]]
+        modId="minecraft"
+        mandatory=true
+        versionRange="[1.19.1,1.20)"
+        ordering="NONE"
+        side="BOTH"
+    [[dependencies.semihardcore]]
+        modId="insanelib"
+        mandatory=true
+        versionRange="[1.7.2,)"
+        ordering="NONE"
+        side="BOTH"

@@ -21,15 +21,13 @@ public class SemiHardcore
     public static final String RESOURCE_PREFIX = MOD_ID + ":";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public SemiHardcore()
-    {
+    public SemiHardcore() {
         ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, Config.COMMON_SPEC);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     @SubscribeEvent
-    public void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event)
-    {
+    public void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof Player)
             event.addCapability(PlayerLifeProvider.IDENTIFIER, new PlayerLifeProvider());
     }

@@ -8,7 +8,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -61,7 +61,7 @@ public class SHCommand {
     private static int getLives(CommandSourceStack source, ServerPlayer targetPlayer) {
         AtomicInteger lives = new AtomicInteger(0);
         targetPlayer.getCapability(PlayerLife.INSTANCE).ifPresent(cap -> lives.set(cap.getLives()));
-        source.sendSuccess(new TranslatableComponent(Strings.Translatable.PLAYER_GET_LIVES_LEFT, targetPlayer.getName(), lives), true);
+        source.sendSuccess(Component.translatable(Strings.Translatable.PLAYER_GET_LIVES_LEFT, targetPlayer.getName(), lives), true);
         return lives.get();
     }
 
@@ -74,11 +74,11 @@ public class SHCommand {
         targetPlayer.getCapability(PlayerLife.INSTANCE).ifPresent(cap -> {
             if (max == -1) cap.setLives(amount);
             else cap.setLives(amount, max);
-            source.sendSuccess(new TranslatableComponent(Strings.Translatable.PLAYER_SET_LIVES_LEFT, targetPlayer.getName(), amount), true);
+            source.sendSuccess(Component.translatable(Strings.Translatable.PLAYER_SET_LIVES_LEFT, targetPlayer.getName(), amount), true);
             success.set(true);
         });
         if (!success.get()) {
-            source.sendFailure(new TranslatableComponent(Strings.Translatable.COMMAND_FAIL));
+            source.sendFailure(Component.translatable(Strings.Translatable.COMMAND_FAIL));
         }
         return amount;
     }
@@ -92,11 +92,11 @@ public class SHCommand {
         targetPlayer.getCapability(PlayerLife.INSTANCE).ifPresent(cap -> {
             if (max == -1) cap.addLives(amount);
             else cap.addLives(amount, max);
-            source.sendSuccess(new TranslatableComponent(Strings.Translatable.PLAYER_ADD_LIVES_LEFT, amount, targetPlayer.getName()), true);
+            source.sendSuccess(Component.translatable(Strings.Translatable.PLAYER_ADD_LIVES_LEFT, amount, targetPlayer.getName()), true);
             success.set(true);
         });
         if (!success.get()) {
-            source.sendFailure(new TranslatableComponent(Strings.Translatable.COMMAND_FAIL));
+            source.sendFailure(Component.translatable(Strings.Translatable.COMMAND_FAIL));
         }
         return amount;
     }
@@ -105,21 +105,21 @@ public class SHCommand {
         AtomicInteger health = new AtomicInteger(0);
         targetPlayer.getCapability(PlayerLife.INSTANCE).ifPresent(playerLife -> health.set(20 + playerLife.getHealthModifier()));
         Health.updateMaxHealth(targetPlayer);
-        source.sendSuccess(new TranslatableComponent(Strings.Translatable.PLAYER_GET_HEALTH, targetPlayer.getName(), health), true);
+        source.sendSuccess(Component.translatable(Strings.Translatable.PLAYER_GET_HEALTH, targetPlayer.getName(), health), true);
         return health.get();
     }
 
     private static int setHealth(CommandSourceStack source, ServerPlayer targetPlayer, int amount) {
         targetPlayer.getCapability(PlayerLife.INSTANCE).ifPresent(playerLife -> playerLife.setHealthModifier(amount - 20));
         Health.updateMaxHealth(targetPlayer);
-        source.sendSuccess(new TranslatableComponent(Strings.Translatable.PLAYER_SET_HEALTH, targetPlayer.getName(), amount), true);
+        source.sendSuccess(Component.translatable(Strings.Translatable.PLAYER_SET_HEALTH, targetPlayer.getName(), amount), true);
         return amount;
     }
 
     private static int addHealth(CommandSourceStack source, ServerPlayer targetPlayer, int amount) {
         targetPlayer.getCapability(PlayerLife.INSTANCE).ifPresent(playerLife -> playerLife.addHealthModifier(amount));
         Health.updateMaxHealth(targetPlayer);
-        source.sendSuccess(new TranslatableComponent(Strings.Translatable.PLAYER_ADD_HEALTH, amount, targetPlayer.getName()), true);
+        source.sendSuccess(Component.translatable(Strings.Translatable.PLAYER_ADD_HEALTH, amount, targetPlayer.getName()), true);
         return amount;
     }
 }

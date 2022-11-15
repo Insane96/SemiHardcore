@@ -2,16 +2,16 @@ package com.insane96mcp.semihardcore.module.base.feature;
 
 import com.insane96mcp.semihardcore.SemiHardcore;
 import com.insane96mcp.semihardcore.capability.PlayerLife;
-import com.insane96mcp.semihardcore.setup.Config;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
+import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.insanelib.base.config.LoadFeature;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
-import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -21,48 +21,34 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.UUID;
 
 @Label(name = "Health")
+@LoadFeature(module = SemiHardcore.RESOURCE_PREFIX + "base")
 public class Health extends Feature {
+    @Config(min = 1)
+    @Label(name = "Starting Health", description = "Players starting Health")
+    public static Integer startingHealth = 20;
+    @Config
+    @Label(name = "Half hearts penalty on death", description = "Half hearts lost when the player dies. Negative numbers can be used to give health to players.")
+    public static Integer healthPenalty = 2;
 
-    private final ForgeConfigSpec.ConfigValue<Integer> startingHealthConfig;
-    private final ForgeConfigSpec.ConfigValue<Integer> healthPenaltyConfig;
-
-    public int startingHealth = 20;
-    public int healthPenalty = 2;
-
-    public Health(Module module) {
-        super(Config.builder, module, true);
-        super.pushConfig(Config.builder);
-        startingHealthConfig = Config.builder
-                .comment("Players starting Health")
-                .defineInRange("Starting Health", this.startingHealth, 1, Integer.MAX_VALUE);
-        healthPenaltyConfig = Config.builder
-                .comment("Half hearts lost when the player dies. Negative numbers can be used to give health to players.")
-                .define("Half hearts penalty on death", this.healthPenalty);
-        Config.builder.pop();
-    }
-
-    @Override
-    public void loadConfig() {
-        super.loadConfig();
-        this.startingHealth = this.startingHealthConfig.get();
-        this.healthPenalty = this.healthPenaltyConfig.get();
+    public Health(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+        super(module, enabledByDefault, canBeDisabled);
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onPlayerDeath(LivingDeathEvent event)
     {
         if (!this.isEnabled()
-                || this.healthPenalty == 0
-                || event.getEntityLiving().getLevel().isClientSide
-                || !(event.getEntityLiving() instanceof ServerPlayer player)
-                || event.getEntityLiving() instanceof FakePlayer
-                || event.getEntityLiving().getLevel().getLevelData().isHardcore()
+                || healthPenalty == 0
+                || event.getEntity().getLevel().isClientSide
+                || !(event.getEntity() instanceof ServerPlayer player)
+                || event.getEntity() instanceof FakePlayer
+                || event.getEntity().getLevel().getLevelData().isHardcore()
                 || player.gameMode.getGameModeForPlayer() == GameType.CREATIVE
                 || player.gameMode.getGameModeForPlayer() == GameType.SPECTATOR)
             return;
 
         player.getCapability(PlayerLife.INSTANCE).ifPresent(livesCap -> {
-            livesCap.addHealthModifier(-this.healthPenalty);
+            livesCap.addHealthModifier(-healthPenalty);
         });
     }
 
@@ -72,11 +58,11 @@ public class Health extends Feature {
     public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
     {
         if (!this.isEnabled()
-                || event.getPlayer().level.isClientSide
+                || event.getEntity().level.isClientSide
                 || event.isEndConquered())
             return;
 
-        ServerPlayer player = (ServerPlayer) event.getPlayer();
+        ServerPlayer player = (ServerPlayer) event.getEntity();
         updateMaxHealth(player);
     }
 

@@ -14,7 +14,7 @@ public class Capabilities {
     @SubscribeEvent
     public static void eventPlayerClone(PlayerEvent.Clone event) {
         Player oldPlayer = event.getOriginal();
-        Player newPlayer = event.getPlayer();
+        Player newPlayer = event.getEntity();
 
         oldPlayer.reviveCaps();
         oldPlayer.getCapability(PlayerLife.INSTANCE).ifPresent(newLives -> newPlayer.getCapability(PlayerLife.INSTANCE).ifPresent(oldLives -> {

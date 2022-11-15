@@ -1,6 +1,7 @@
 package com.insane96mcp.semihardcore.capability;
 
-import com.insane96mcp.semihardcore.module.Modules;
+import com.insane96mcp.semihardcore.module.base.feature.Health;
+import com.insane96mcp.semihardcore.module.base.feature.Lives;
 import net.minecraft.util.Mth;
 
 public class PlayerLifeImpl implements IPlayerLife {
@@ -9,8 +10,8 @@ public class PlayerLifeImpl implements IPlayerLife {
     private int healthModifier;
 
     public PlayerLifeImpl() {
-        this.lives = Modules.base.lives.startingLives;
-        this.healthModifier = Modules.base.health.startingHealth - 20;
+        this.lives = Lives.startingLives;
+        this.healthModifier = Health.startingHealth - 20;
     }
 
     @Override
@@ -20,7 +21,7 @@ public class PlayerLifeImpl implements IPlayerLife {
 
     @Override
     public void setLives(int lives) {
-        this.setLives(lives, Modules.base.lives.maxLives == 0 ? Integer.MAX_VALUE : Modules.base.lives.maxLives);
+        this.setLives(lives, Lives.maxLives == 0 ? Integer.MAX_VALUE : Lives.maxLives);
     }
 
     @Override
@@ -30,7 +31,7 @@ public class PlayerLifeImpl implements IPlayerLife {
 
     @Override
     public void addLives(int lives) {
-        this.addLives(lives, Modules.base.lives.maxLives == 0 ? Integer.MAX_VALUE : Modules.base.lives.maxLives);
+        this.addLives(lives, Lives.maxLives == 0 ? Integer.MAX_VALUE : Lives.maxLives);
     }
 
     @Override
