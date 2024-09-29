@@ -3,6 +3,7 @@ package insane96mcp.semihardcore;
 import com.mojang.logging.LogUtils;
 import insane96mcp.semihardcore.capability.PlayerLifeImpl;
 import insane96mcp.semihardcore.capability.PlayerLifeProvider;
+import insane96mcp.semihardcore.command.SHCommand;
 import insane96mcp.semihardcore.setup.SHCommonConfig;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -50,6 +51,6 @@ public class SemiHardcore
 
     @SubscribeEvent
     public void registerCommands(RegisterCommandsEvent event) {
-        //SHCommand.register(event.getDispatcher());
+        SHCommand.register(event.getDispatcher());
     }
 }
