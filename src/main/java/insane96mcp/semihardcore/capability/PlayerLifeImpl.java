@@ -56,5 +56,9 @@ public class PlayerLifeImpl implements IPlayerLife {
 	@Override
 	public void addHealthModifier(int healthModifier) {
 		this.healthModifier += healthModifier;
+		if (this.healthModifier < MaxHealth.cap.min)
+			this.healthModifier = (int) MaxHealth.cap.min;
+		else if (this.healthModifier > MaxHealth.cap.max)
+			this.healthModifier = (int) MaxHealth.cap.max;
 	}
 }

@@ -5,8 +5,10 @@ import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.insanelib.base.config.MinMax;
 import insane96mcp.semihardcore.SemiHardcore;
 import insane96mcp.semihardcore.capability.PlayerLifeImpl;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -29,7 +31,9 @@ public class MaxHealth extends Feature {
 	@Config
 	@Label(name = "Health Penalty", description = "Max health lost when the player dies. Negative numbers can be used to give health to players.")
 	public static Integer healthPenalty = 2;
-	//TODO add cap
+	@Config
+	@Label(name = "Cap", description = "Min and max max health players can gain/lose")
+	public static MinMax cap = new MinMax(-19, 0);
 
 	public MaxHealth(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
@@ -65,7 +69,6 @@ public class MaxHealth extends Feature {
 		updateMaxHealth(player);
 	}
 
-	//TODO Inform player about health loss
 	@SuppressWarnings("ConstantConditions")
 	public static void updateMaxHealth(Player player) {
 		player.getCapability(PlayerLifeImpl.INSTANCE).ifPresent(playerLife -> {
@@ -78,6 +81,10 @@ public class MaxHealth extends Feature {
 					new AttributeModifier(MAX_HEALTH_MODIFIER_UUID, SemiHardcore.RESOURCE_PREFIX + "health_modifier", playerLife.getHealthModifier(), AttributeModifier.Operation.ADDITION));
 
 			player.setHealth(player.getMaxHealth());
+			if (healthPenalty > 0)
+				player.sendSystemMessage(Component.translatable(SemiHardcore.RESOURCE_PREFIX + "max_health_lost", healthPenalty));
+			else
+				player.sendSystemMessage(Component.translatable(SemiHardcore.RESOURCE_PREFIX + "max_health_gained", healthPenalty * -1));
 		});
 	}
 }
