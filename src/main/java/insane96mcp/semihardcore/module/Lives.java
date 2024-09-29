@@ -10,9 +10,11 @@ import insane96mcp.semihardcore.capability.PlayerLifeImpl;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.GameType;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -37,6 +39,13 @@ public class Lives extends Feature {
 		super(module, enabledByDefault, canBeDisabled);
 	}
 
+	//TODO doesn't work if two or more players die in the same tick
+	private boolean hasChangedGameRule = false;
+	private double x;
+	private double y;
+	private double z;
+	private float rotationX = 0;
+	private float rotationY = 0;
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onPlayerDeath(LivingDeathEvent event)
 	{
@@ -53,6 +62,16 @@ public class Lives extends Feature {
 			playerLife.addLives(-1);
 			if (playerLife.getLives() <= 0) {
 				player.setRespawnPosition(player.level().dimension(), player.blockPosition(), player.getXRot(), true, false);
+				GameRules.BooleanValue immediateRespawn = player.level().getGameRules().getRule(GameRules.RULE_DO_IMMEDIATE_RESPAWN);
+				if (!immediateRespawn.get()) {
+					immediateRespawn.set(true, player.level().getServer());
+					hasChangedGameRule = true;
+				}
+				x = player.getX();
+				y = player.getY();
+				z = player.getZ();
+				rotationX = player.getXRot();
+				rotationY = player.getYRot();
 				LightningBolt lightningBolt = new LightningBolt(EntityType.LIGHTNING_BOLT, player.level());
 				lightningBolt.setVisualOnly(true);
 				lightningBolt.setPos(player.position());
@@ -88,6 +107,9 @@ public class Lives extends Feature {
 				player.connection.send(new ClientboundSetTitleTextPacket(Component.translatable(SemiHardcore.RESOURCE_PREFIX + "gg_wp")));
 				player.connection.send(new ClientboundSetSubtitleTextPacket(Component.translatable(SemiHardcore.RESOURCE_PREFIX + "no_lives_remaining", playerLife.getLives())));
 				player.setGameMode(GameType.SPECTATOR);
+				player.teleportTo((ServerLevel) player.level(), x, y, z, rotationY, rotationX);
+				if (hasChangedGameRule)
+					player.level().getGameRules().getRule(GameRules.RULE_DO_IMMEDIATE_RESPAWN).set(false, player.level().getServer());
 
 				if (announceLifeLostToChat) {
 					player.server.getPlayerList().broadcastSystemMessage(Component.translatable(SemiHardcore.RESOURCE_PREFIX + "player_no_lives_remaining", player.getDisplayName().getString(), playerLife.getLives()), false);
