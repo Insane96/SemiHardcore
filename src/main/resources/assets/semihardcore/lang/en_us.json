@@ -13,6 +13,8 @@
 	"semihardcore:max_health_gained": "You gained %s Max Health",
 	"semihardcore:player_life_lost": "%s lost a life. Has %s lives remaining.",
 	"semihardcore:player_no_lives_remaining": "%s lost a life. Has no lives remaining. F in chat.",
+	"semihardcore:opt_out": "Opted out of lives and max health changes",
+	"semihardcore:opt_in": "Opted in lives and max health changes",
 	"semihardcore:gg_wp": "GG WP",
 	"semihardcore:no_lives_remaining": "You lost all your lives",
 	"semihardcore:command_fail": "Failed to execute command"

@@ -1,6 +1,7 @@
 package insane96mcp.semihardcore.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import insane96mcp.semihardcore.SemiHardcore;
 import insane96mcp.semihardcore.capability.PlayerLifeImpl;
@@ -19,44 +20,51 @@ public class SHCommand {
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		dispatcher.register(Commands.literal("semihardcore").requires(source -> source.hasPermission(2))
 				.then(Commands.argument("targetPlayer", EntityArgument.player())
+						.then(Commands.literal("optout")
+								.then(Commands.argument("optout", BoolArgumentType.bool())
+										.executes(context -> optOut(context.getSource(), EntityArgument.getPlayer(context, "player"), BoolArgumentType.getBool(context, "optout"))))
+						)
 						.then(Commands.literal("lives")
 								.then(Commands.literal("get")
-										.executes(context -> getLives(context.getSource(), EntityArgument.getPlayer(context, "targetPlayer")))
+										.executes(context -> getLives(context.getSource(), EntityArgument.getPlayer(context, "player")))
 								)
 								.then(Commands.literal("set")
 										.then(Commands.argument("amount", IntegerArgumentType.integer())
-												.then(Commands.argument("max", IntegerArgumentType.integer()) //TODO Remove, makes no sense
-														.executes(context -> setLives(context.getSource(), EntityArgument.getPlayer(context, "targetPlayer"), IntegerArgumentType.getInteger(context, "amount"), IntegerArgumentType.getInteger(context, "max")))
-												)
-												.executes(context -> setLives(context.getSource(), EntityArgument.getPlayer(context, "targetPlayer"), IntegerArgumentType.getInteger(context, "amount")))
+												.executes(context -> setLives(context.getSource(), EntityArgument.getPlayer(context, "player"), IntegerArgumentType.getInteger(context, "amount")))
 										)
 								)
 								.then(Commands.literal("add")
 										.then(Commands.argument("amount", IntegerArgumentType.integer())
 												.then(Commands.argument("max", IntegerArgumentType.integer())
-														.executes(context -> addLives(context.getSource(), EntityArgument.getPlayer(context, "targetPlayer"), IntegerArgumentType.getInteger(context, "amount"), IntegerArgumentType.getInteger(context, "max")))
+														.executes(context -> addLives(context.getSource(), EntityArgument.getPlayer(context, "player"), IntegerArgumentType.getInteger(context, "amount"), IntegerArgumentType.getInteger(context, "max")))
 												)
-												.executes(context -> addLives(context.getSource(), EntityArgument.getPlayer(context, "targetPlayer"), IntegerArgumentType.getInteger(context, "amount")))
+												.executes(context -> addLives(context.getSource(), EntityArgument.getPlayer(context, "player"), IntegerArgumentType.getInteger(context, "amount")))
 										)
 								)
 						)
 						.then(Commands.literal("health")
 								.then(Commands.literal("get")
-										.executes(context -> getHealth(context.getSource(), EntityArgument.getPlayer(context, "targetPlayer")))
+										.executes(context -> getHealth(context.getSource(), EntityArgument.getPlayer(context, "player")))
 								)
 								.then(Commands.literal("set")
 										.then(Commands.argument("amount", IntegerArgumentType.integer())
-												.executes(context -> setHealth(context.getSource(), EntityArgument.getPlayer(context, "targetPlayer"), IntegerArgumentType.getInteger(context, "amount")))
+												.executes(context -> setHealth(context.getSource(), EntityArgument.getPlayer(context, "player"), IntegerArgumentType.getInteger(context, "amount")))
 										)
 								)
 								.then(Commands.literal("add")
 										.then(Commands.argument("amount", IntegerArgumentType.integer())
-												.executes(context -> addHealth(context.getSource(), EntityArgument.getPlayer(context, "targetPlayer"), IntegerArgumentType.getInteger(context, "amount")))
+												.executes(context -> addHealth(context.getSource(), EntityArgument.getPlayer(context, "player"), IntegerArgumentType.getInteger(context, "amount")))
 										)
 								)
 						)
 				)
 		);
+	}
+
+	private static int optOut(CommandSourceStack source, ServerPlayer targetPlayer, boolean optOut) {
+		targetPlayer.getCapability(PlayerLifeImpl.INSTANCE).ifPresent(cap -> cap.setOptOut(optOut));
+		source.sendSuccess(() -> Component.translatable(SemiHardcore.RESOURCE_PREFIX + "opt_" + (optOut ? "out" : "in"), targetPlayer.getName()), true);
+		return 1;
 	}
 
 	private static int getLives(CommandSourceStack source, ServerPlayer targetPlayer) {

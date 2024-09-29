@@ -45,6 +45,7 @@ public class SemiHardcore
         oldPlayer.getCapability(PlayerLifeImpl.INSTANCE).ifPresent(newLives -> newPlayer.getCapability(PlayerLifeImpl.INSTANCE).ifPresent(oldLives -> {
             oldLives.setLives(newLives.getLives());
             oldLives.setHealthModifier(newLives.getHealthModifier());
+            oldLives.setOptOut(newLives.isOptOut());
         }));
         oldPlayer.invalidateCaps();
     }

@@ -10,12 +10,23 @@ import net.minecraftforge.common.capabilities.CapabilityToken;
 public class PlayerLifeImpl implements IPlayerLife {
 	public static final Capability<IPlayerLife> INSTANCE = CapabilityManager.get(new CapabilityToken<>() {});
 
+	private boolean optOut;
 	private int lives;
 	private int healthModifier;
 
 	public PlayerLifeImpl() {
 		this.lives = Lives.startingLives;
 		this.healthModifier = MaxHealth.startingHealth - 20;
+	}
+
+	@Override
+	public boolean isOptOut() {
+		return this.optOut;
+	}
+
+	@Override
+	public void setOptOut(boolean optOut) {
+		this.optOut = optOut;
 	}
 
 	@Override

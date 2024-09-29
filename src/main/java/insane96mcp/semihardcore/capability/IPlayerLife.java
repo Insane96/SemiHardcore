@@ -4,6 +4,9 @@ import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 
 @AutoRegisterCapability
 public interface IPlayerLife {
+	boolean isOptOut();
+	void setOptOut(boolean optOut);
+
 	int getLives();
 	void setLives(int lives);
 	void setLives(int lives, int upperCap);

@@ -30,7 +30,7 @@ public class Lives extends Feature {
 	public static Integer startingLives = 5;
 	@Config(min = 0)
 	@Label(name = "Max Lives", description = "Max lives players can gain. 0 for infinite")
-	public static Integer maxLives = 5;
+	public static Integer maxLives = 0;
 	@Config
 	@Label(name = "Announce Life Lost to Chat", description = "Announce players' life lost to chat")
 	public static Boolean announceLifeLostToChat = true;
@@ -59,6 +59,8 @@ public class Lives extends Feature {
 			return;
 
 		player.getCapability(PlayerLifeImpl.INSTANCE).ifPresent(playerLife -> {
+			if (playerLife.isOptOut())
+				return;
 			playerLife.addLives(-1);
 			if (playerLife.getLives() <= 0) {
 				player.setRespawnPosition(player.level().dimension(), player.blockPosition(), player.getXRot(), true, false);
@@ -92,6 +94,8 @@ public class Lives extends Feature {
 			return;
 
 		player.getCapability(PlayerLifeImpl.INSTANCE).ifPresent(playerLife -> {
+			if (playerLife.isOptOut())
+				return;
 			if (playerLife.getLives() > 0 && player.gameMode.getGameModeForPlayer() != GameType.SPECTATOR) {
 				player.connection.send(new ClientboundSetTitleTextPacket(Component.translatable(SemiHardcore.RESOURCE_PREFIX + "life_lost")));
 				if (playerLife.getLives() > 1)

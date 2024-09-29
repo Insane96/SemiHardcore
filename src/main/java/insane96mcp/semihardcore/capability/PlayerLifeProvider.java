@@ -29,6 +29,7 @@ public class PlayerLifeProvider implements ICapabilityProvider, ICapabilitySeria
 		CompoundTag nbt = new CompoundTag();
 		nbt.putInt("lives", backend.getLives());
 		nbt.putInt("health_modifier", backend.getHealthModifier());
+		nbt.putBoolean("opt_out", backend.isOptOut());
 		return nbt;
 	}
 
@@ -36,5 +37,6 @@ public class PlayerLifeProvider implements ICapabilityProvider, ICapabilitySeria
 	public void deserializeNBT(CompoundTag nbt) {
 		backend.setLives(nbt.getInt("lives"));
 		backend.setHealthModifier(nbt.getInt("health_modifier"));
+		backend.setOptOut(nbt.getBoolean("opt_out"));
 	}
 }

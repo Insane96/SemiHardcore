@@ -52,7 +52,11 @@ public class MaxHealth extends Feature {
 				|| player.gameMode.getGameModeForPlayer() == GameType.SPECTATOR)
 			return;
 
-		player.getCapability(PlayerLifeImpl.INSTANCE).ifPresent(livesCap -> livesCap.addHealthModifier(-healthPenalty));
+		player.getCapability(PlayerLifeImpl.INSTANCE).ifPresent(livesCap -> {
+			if (livesCap.isOptOut())
+				return;
+			livesCap.addHealthModifier(-healthPenalty);
+		});
 	}
 
 	public static final UUID MAX_HEALTH_MODIFIER_UUID = UUID.fromString("5ee1626e-c727-4ecd-96b5-f1487896fd44");
@@ -72,6 +76,8 @@ public class MaxHealth extends Feature {
 	@SuppressWarnings("ConstantConditions")
 	public static void updateMaxHealth(Player player) {
 		player.getCapability(PlayerLifeImpl.INSTANCE).ifPresent(playerLife -> {
+			if (playerLife.isOptOut())
+				return;
 			if (!player.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
 				return;
 			if (player.getAttribute(Attributes.MAX_HEALTH).getModifier(MAX_HEALTH_MODIFIER_UUID) != null) {
