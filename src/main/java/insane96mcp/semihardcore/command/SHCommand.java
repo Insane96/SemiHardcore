@@ -19,7 +19,7 @@ public class SHCommand {
 	public static final String COMMAND_FAIL = SemiHardcore.RESOURCE_PREFIX + "command_fail";
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		dispatcher.register(Commands.literal("semihardcore").requires(source -> source.hasPermission(2))
-				.then(Commands.argument("targetPlayer", EntityArgument.player())
+				.then(Commands.argument("player", EntityArgument.player())
 						.then(Commands.literal("optout")
 								.then(Commands.argument("optout", BoolArgumentType.bool())
 										.executes(context -> optOut(context.getSource(), EntityArgument.getPlayer(context, "player"), BoolArgumentType.getBool(context, "optout"))))

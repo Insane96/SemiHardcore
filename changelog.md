@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.1
+* Fixed command not working
+
 ## 2.0.0
 * Updated to 1.20.1
 * Added `/semihardcore <player> optout <true/false>` to opt out of the lives and max health changes 
