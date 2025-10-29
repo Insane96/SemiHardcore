@@ -1,0 +1,21 @@
+{
+	"semihardcore.player_get_lives_left": "Vite rimaste a %s: %s",
+	"semihardcore.player_set_lives_left": "Impostate vite di %s a %s",
+	"semihardcore.player_add_lives_left": "Aggiunte %s vite a %s",
+	"semihardcore.player_get_health": "%s vita base: %s",
+	"semihardcore.player_set_health": "Impostata la vita base di %s a %s",
+	"semihardcore.player_add_health": "Aggiunta %s vita base a %s",
+	"semihardcore.life_lost": "Hai perso una vita",
+	"semihardcore.lives_remaining": "%s vite rimaste",
+	"semihardcore.life_remaining": "Ultima vita, sta' attento!",
+	"semihardcore.life_lost_lose": "Hai perso una vita, nessuna rimasta. GG WP",
+	"semihardcore.max_health_lost": "Hai perso %s vita massima",
+	"semihardcore.max_health_gained": "Hai ottenuto %s vita massima",
+	"semihardcore.player_life_lost": "%s ha perso una vita. Ha %s vite rimaste.",
+	"semihardcore.player_no_lives_remaining": "%s ha perso una vita. Nessuna rimasta. F in chat.",
+	"semihardcore.opt_out": "Non più partecipante alle modifiche della vita massima e vite",
+	"semihardcore.opt_in": "Ora partecipante alle modifiche della vita massima e vite",
+	"semihardcore.gg_wp": "GG WP",
+	"semihardcore.no_lives_remaining": "Hai perso tutte le tue vite",
+	"semihardcore.command_fail": "Impossibile eseguire il comando"
+}

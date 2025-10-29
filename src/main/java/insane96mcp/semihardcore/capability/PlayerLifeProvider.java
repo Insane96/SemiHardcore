@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class PlayerLifeProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundTag> {
 
-	public static final ResourceLocation IDENTIFIER = new ResourceLocation(SemiHardcore.MOD_ID, "semihardcore");
+	public static final ResourceLocation IDENTIFIER = SemiHardcore.location("semihardcore");
 
 	private final IPlayerLife backend = new PlayerLifeImpl();
 	private final LazyOptional<IPlayerLife> optionalData = LazyOptional.of(() -> backend);
@@ -28,7 +28,7 @@ public class PlayerLifeProvider implements ICapabilityProvider, ICapabilitySeria
 	public CompoundTag serializeNBT() {
 		CompoundTag nbt = new CompoundTag();
 		nbt.putInt("lives", backend.getLives());
-		nbt.putInt("health_modifier", backend.getHealthModifier());
+		nbt.putFloat("health_modifier", backend.getHealthModifier());
 		nbt.putBoolean("opt_out", backend.isOptOut());
 		return nbt;
 	}
@@ -36,7 +36,7 @@ public class PlayerLifeProvider implements ICapabilityProvider, ICapabilitySeria
 	@Override
 	public void deserializeNBT(CompoundTag nbt) {
 		backend.setLives(nbt.getInt("lives"));
-		backend.setHealthModifier(nbt.getInt("health_modifier"));
+		backend.setHealthModifier(nbt.getFloat("health_modifier"));
 		backend.setOptOut(nbt.getBoolean("opt_out"));
 	}
 }

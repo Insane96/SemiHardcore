@@ -13,7 +13,7 @@ public interface IPlayerLife {
 	void addLives(int lives);
 	void addLives(int lives, int upperCap);
 
-	int getHealthModifier();
-	void setHealthModifier(int healthModifier);
-	void addHealthModifier(int healthModifier);
+	float getHealthModifier();
+	void setHealthModifier(float healthModifier);
+	void addHealthModifier(float healthModifier);
 }

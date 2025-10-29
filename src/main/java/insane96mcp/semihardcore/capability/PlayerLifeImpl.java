@@ -12,11 +12,11 @@ public class PlayerLifeImpl implements IPlayerLife {
 
 	private boolean optOut;
 	private int lives;
-	private int healthModifier;
+	private float healthModifier;
 
 	public PlayerLifeImpl() {
 		this.lives = Lives.startingLives;
-		this.healthModifier = MaxHealth.startingHealth - 20;
+		this.healthModifier = MaxHealth.startingHealth - 20f;
 	}
 
 	@Override
@@ -55,17 +55,17 @@ public class PlayerLifeImpl implements IPlayerLife {
 	}
 
 	@Override
-	public int getHealthModifier() {
+	public float getHealthModifier() {
 		return this.healthModifier;
 	}
 
 	@Override
-	public void setHealthModifier(int healthModifier) {
+	public void setHealthModifier(float healthModifier) {
 		this.healthModifier = healthModifier;
 	}
 
 	@Override
-	public void addHealthModifier(int healthModifier) {
+	public void addHealthModifier(float healthModifier) {
 		this.healthModifier += healthModifier;
 		if (this.healthModifier < MaxHealth.cap.min)
 			this.healthModifier = (int) MaxHealth.cap.min;

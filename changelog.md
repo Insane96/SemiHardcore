@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.1.0
+* Changed the default challenge
+  * Player now starts with 2 health and 10 lives. Each time they die, they lose a life and gain 2 max health
+* Now requires Forge 47.4.0+ and InsaneLib 1.21.20+
+* Setting health through command no longer sends messages to the player (unless added)
+* Added italian translation
+* Fixed starting health not working
+
 ## 2.0.1
 * Fixed command not working
 

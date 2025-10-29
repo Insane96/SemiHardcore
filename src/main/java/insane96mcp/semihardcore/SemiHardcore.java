@@ -5,6 +5,7 @@ import insane96mcp.semihardcore.capability.PlayerLifeImpl;
 import insane96mcp.semihardcore.capability.PlayerLifeProvider;
 import insane96mcp.semihardcore.command.SHCommand;
 import insane96mcp.semihardcore.setup.SHCommonConfig;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
@@ -53,5 +54,13 @@ public class SemiHardcore
     @SubscribeEvent
     public void registerCommands(RegisterCommandsEvent event) {
         SHCommand.register(event.getDispatcher());
+    }
+
+    public static ResourceLocation location(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    }
+
+    public static String lang(String path) {
+        return MOD_ID + "." + path;
     }
 }

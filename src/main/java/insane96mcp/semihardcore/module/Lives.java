@@ -1,9 +1,7 @@
 package insane96mcp.semihardcore.module;
 
 import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
-import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.semihardcore.SemiHardcore;
 import insane96mcp.semihardcore.capability.PlayerLifeImpl;
@@ -22,22 +20,14 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@Label(name = "Lives")
 @LoadFeature(module = SemiHardcore.RESOURCE_PREFIX + "base")
 public class Lives extends Feature {
-	@Config(min = 1)
-	@Label(name = "Starting Lives", description = "How many lives players spawn with")
-	public static Integer startingLives = 5;
-	@Config(min = 0)
-	@Label(name = "Max Lives", description = "Max lives players can gain. 0 for infinite")
+	@Config(min = 1, description = "How many lives players spawn with")
+	public static Integer startingLives = 10;
+	@Config(min = 0, description = "Max lives players can have. 0 for infinite")
 	public static Integer maxLives = 0;
-	@Config
-	@Label(name = "Announce Life Lost to Chat", description = "Announce players' life lost to chat")
+	@Config(description = "Announce players' life lost to chat")
 	public static Boolean announceLifeLostToChat = true;
-
-	public Lives(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-		super(module, enabledByDefault, canBeDisabled);
-	}
 
 	//TODO doesn't work if two or more players die in the same tick
 	private boolean hasChangedGameRule = false;
@@ -46,6 +36,7 @@ public class Lives extends Feature {
 	private double z;
 	private float rotationX = 0;
 	private float rotationY = 0;
+
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onPlayerDeath(LivingDeathEvent event)
 	{
@@ -97,27 +88,25 @@ public class Lives extends Feature {
 			if (playerLife.isOptOut())
 				return;
 			if (playerLife.getLives() > 0 && player.gameMode.getGameModeForPlayer() != GameType.SPECTATOR) {
-				player.connection.send(new ClientboundSetTitleTextPacket(Component.translatable(SemiHardcore.RESOURCE_PREFIX + "life_lost")));
+				player.connection.send(new ClientboundSetTitleTextPacket(Component.translatable(SemiHardcore.lang("life_lost"))));
 				if (playerLife.getLives() > 1)
-					player.connection.send(new ClientboundSetSubtitleTextPacket(Component.translatable(SemiHardcore.RESOURCE_PREFIX + "lives_remaining", playerLife.getLives())));
+					player.connection.send(new ClientboundSetSubtitleTextPacket(Component.translatable(SemiHardcore.lang("lives_remaining"), playerLife.getLives())));
 				else
-					player.connection.send(new ClientboundSetSubtitleTextPacket(Component.translatable(SemiHardcore.RESOURCE_PREFIX + "life_remaining", playerLife.getLives())));
+					player.connection.send(new ClientboundSetSubtitleTextPacket(Component.translatable(SemiHardcore.lang("life_remaining"), playerLife.getLives())));
 
-				if (announceLifeLostToChat) {
-					player.server.getPlayerList().broadcastSystemMessage(Component.translatable(SemiHardcore.RESOURCE_PREFIX + "player_life_lost", player.getDisplayName().getString(), playerLife.getLives()), false);
-				}
+				if (announceLifeLostToChat)
+					player.server.getPlayerList().broadcastSystemMessage(Component.translatable(SemiHardcore.lang("player_life_lost"), player.getDisplayName().getString(), playerLife.getLives()), false);
 			}
 			else {
-				player.connection.send(new ClientboundSetTitleTextPacket(Component.translatable(SemiHardcore.RESOURCE_PREFIX + "gg_wp")));
-				player.connection.send(new ClientboundSetSubtitleTextPacket(Component.translatable(SemiHardcore.RESOURCE_PREFIX + "no_lives_remaining", playerLife.getLives())));
+				player.connection.send(new ClientboundSetTitleTextPacket(Component.translatable(SemiHardcore.lang("gg_wp"))));
+				player.connection.send(new ClientboundSetSubtitleTextPacket(Component.translatable(SemiHardcore.lang("no_lives_remaining"), playerLife.getLives())));
 				player.setGameMode(GameType.SPECTATOR);
 				player.teleportTo((ServerLevel) player.level(), x, y, z, rotationY, rotationX);
 				if (hasChangedGameRule)
 					player.level().getGameRules().getRule(GameRules.RULE_DO_IMMEDIATE_RESPAWN).set(false, player.level().getServer());
 
-				if (announceLifeLostToChat) {
-					player.server.getPlayerList().broadcastSystemMessage(Component.translatable(SemiHardcore.RESOURCE_PREFIX + "player_no_lives_remaining", player.getDisplayName().getString(), playerLife.getLives()), false);
-				}
+				if (announceLifeLostToChat)
+					player.server.getPlayerList().broadcastSystemMessage(Component.translatable(SemiHardcore.lang("player_no_lives_remaining"), player.getDisplayName().getString(), playerLife.getLives()), false);
 			}
 		});
 	}

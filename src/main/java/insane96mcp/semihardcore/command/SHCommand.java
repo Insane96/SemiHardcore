@@ -1,5 +1,6 @@
 package insane96mcp.semihardcore.command;
 
+import com.google.common.util.concurrent.AtomicDouble;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -111,23 +112,23 @@ public class SHCommand {
 	}
 
 	private static int getHealth(CommandSourceStack source, ServerPlayer targetPlayer) {
-		AtomicInteger health = new AtomicInteger(0);
-		targetPlayer.getCapability(PlayerLifeImpl.INSTANCE).ifPresent(playerLife -> health.set(20 + playerLife.getHealthModifier()));
-		MaxHealth.updateMaxHealth(targetPlayer);
+		AtomicDouble health = new AtomicDouble(0);
+		targetPlayer.getCapability(PlayerLifeImpl.INSTANCE).ifPresent(playerLife -> health.set(20f + playerLife.getHealthModifier()));
+		MaxHealth.updateMaxHealth(targetPlayer, false);
 		source.sendSuccess(() -> Component.translatable(SemiHardcore.RESOURCE_PREFIX + "player_get_health", targetPlayer.getName(), health), true);
-		return health.get();
+		return (int) health.get();
 	}
 
 	private static int setHealth(CommandSourceStack source, ServerPlayer targetPlayer, int amount) {
 		targetPlayer.getCapability(PlayerLifeImpl.INSTANCE).ifPresent(playerLife -> playerLife.setHealthModifier(amount - 20));
-		MaxHealth.updateMaxHealth(targetPlayer);
+		MaxHealth.updateMaxHealth(targetPlayer, false);
 		source.sendSuccess(() -> Component.translatable(SemiHardcore.RESOURCE_PREFIX + "player_set_health", targetPlayer.getName(), amount), true);
 		return amount;
 	}
 
 	private static int addHealth(CommandSourceStack source, ServerPlayer targetPlayer, int amount) {
 		targetPlayer.getCapability(PlayerLifeImpl.INSTANCE).ifPresent(playerLife -> playerLife.addHealthModifier(amount));
-		MaxHealth.updateMaxHealth(targetPlayer);
+		MaxHealth.updateMaxHealth(targetPlayer, true);
 		source.sendSuccess(() -> Component.translatable(SemiHardcore.RESOURCE_PREFIX + "player_add_health", amount, targetPlayer.getName()), true);
 		return amount;
 	}
