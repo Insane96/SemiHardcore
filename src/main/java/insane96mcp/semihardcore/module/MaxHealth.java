@@ -24,7 +24,7 @@ import java.util.UUID;
 @LoadFeature(module = SemiHardcore.RESOURCE_PREFIX + "base")
 public class MaxHealth extends Feature {
 	@Config(min = 0, description = "How much max health players spawn with")
-	public static Integer startingHealth = 2;
+	public static Integer startingHealth = 10;
 	@Config(description = "Max health lost when the player dies. Negative numbers can be used to give health to players.")
 	public static Integer healthPenalty = -2;
 	@Config(description = "Min and max max health players can have. E.g. Setting min to -10 and max to 0 means that the player can't have less than 5 hearts and more than 10")

@@ -23,7 +23,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 @LoadFeature(module = SemiHardcore.RESOURCE_PREFIX + "base")
 public class Lives extends Feature {
 	@Config(min = 1, description = "How many lives players spawn with")
-	public static Integer startingLives = 10;
+	public static Integer startingLives = 6;
 	@Config(min = 0, description = "Max lives players can have. 0 for infinite")
 	public static Integer maxLives = 0;
 	@Config(description = "Announce players' life lost to chat")

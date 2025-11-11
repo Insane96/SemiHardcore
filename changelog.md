@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.1
+* Changed the default settings
+  * Player now starts with 5 hearts and 6 lives. Each time they die, they lose a life and gain 1 heart
+
 ## 2.1.0
 * Changed the default challenge
   * Player now starts with 2 health and 10 lives. Each time they die, they lose a life and gain 2 max health
