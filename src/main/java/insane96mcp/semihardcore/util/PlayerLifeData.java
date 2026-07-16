@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Player;
 /**
  * Replaces the Forge capability (IPlayerLife) that used to back this data. Lives/healthModifier/optOut are
  * stored in the player's persisted NBT, which vanilla itself carries over death/respawn/dimension change.
- * This will change in 26.1 since NeoForge introduced
+ * This will change in 26.1 since NeoForge introduced <a href="https://github.com/Insane96/InsaneLib/blob/2f2d64b93caf82b0da7824495ef40f714141b654/REFACTOR-ROADMAP.md#-6--modnbtdata--nbt-tags--neoforge-data-attachments-long-term">Data Attachments</a>
  */
 public class PlayerLifeData {
     private static final ResourceLocation LIVES = SemiHardcore.location("lives");
